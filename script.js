@@ -65,5 +65,5 @@ function Win(btns) {
         btn.removeEventListener("click", clickBtnContainer)
     })
 
-    paragraphEnd.textContent = `$Играч {btns[0].textContent} печели!!!`
+    paragraphEnd.textContent = `Играч ${btns[0].textContent} печели!!!`
 }
