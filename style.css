@@ -1,0 +1,104 @@
+﻿html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background: rgb(195 254 237)
+}
+
+.title > h1 {
+    font-size: 4vw;
+}
+
+.content-container {
+    height: 90%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr minmax(300px, 1fr);
+    grid-template-rows: repeat(4, auto);
+    justify-items: center;
+    align-items: center;
+    grid-template-areas:
+        "t t t"
+        "p p p"
+        "c c b"
+        "c c b";
+}
+
+.title {
+    grid-area: t;
+}
+.container-btn {
+    height: 30vw;
+    width: 30vw;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+    grid-template-rows: repeat(3, minmax(100px, 9vw));
+    grid-area: c;
+    justify-self: center;
+}
+
+.container {
+    width: 100%;
+    background-color: rgba(0, 255, 255, 0.5);
+    font-size: 7vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-btn-client {
+    grid-area: b;
+    width: 50%;
+    align-self: start;
+    justify-self: start;
+    margin-right: auto;
+}
+
+.btn-client {
+    border: none;
+    width: 100%;
+    font-size: 30px;
+    background-color: aqua;
+    color: white;
+    border-radius: 20px;
+
+}
+#report-end {
+    color: aqua;
+    font-size: 40px;
+    grid-area: p;
+}
+
+@media screen and (max-width: 800px) {
+    .container {
+        font-size: 20vw;
+
+    }
+    .title > h1 {
+        font-size: 40px;
+    }
+    .container-btn {
+        height: 10vw;
+        width: 10vw;
+        margin-right: auto;
+        padding-top: 20px;
+        padding-left: 10vw;
+        align-self: start;
+    }
+    
+    .container-btn-client {
+        margin: auto;
+    }
+    .content-container {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 30px 90vw 1fr;
+        grid-template-areas:
+            "t t t"
+            "p p p"
+            "c c c"
+            "b b b";
+    }
+
+}
