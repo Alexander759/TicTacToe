@@ -100,5 +100,8 @@ body {
             "c c c"
             "b b b";
     }
-
+    
+    #report-end {
+    font-size: 20px;
+    }
 }
