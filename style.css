@@ -16,7 +16,7 @@ body {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr minmax(300px, 1fr);
-    grid-template-rows: repeat(4, auto);
+    grid-template-rows: auto 70px auto auto;
     justify-items: center;
     align-items: center;
     grid-template-areas:
@@ -59,10 +59,11 @@ body {
 .btn-client {
     border: none;
     width: 100%;
-    font-size: 30px;
+    font-size: 25px;
     background-color: aqua;
     color: white;
     border-radius: 20px;
+    margin: 10px;
 
 }
 #report-end {
