@@ -3,8 +3,7 @@ const btnContainers = document.querySelectorAll(".container")
 const paragraphEnd = document.getElementById("report-end")
 const newGameBtn = document.getElementById("new-game-with-friend")
 const easyGameBtn = document.getElementById("easy")
-const mediumCameBtn = document.getElementById("medioum")
-
+const impossibleGameBtn = document.getElementById("impossible")
 
 let clickBtnContainer = null
 let someoneWin = null
@@ -13,8 +12,12 @@ let tie = null
 let xIsOnTurn = true
 let thereIsNoWinner = true
 let count = 0
+//let table = null
 
 newGameBtn.addEventListener("click", function () {
+    btnContainers.forEach(function (item) {
+        item.removeEventListener("click", clickBtnContainer)
+    })
 
     clickBtnContainer = function (e) {
         if (xIsOnTurn) {
@@ -49,7 +52,9 @@ newGameBtn.addEventListener("click", function () {
 })
 
 easyGameBtn.addEventListener("click", function () {
-    
+    btnContainers.forEach(function (item) {
+        item.removeEventListener("click", clickBtnContainer)
+    })
 
     clickBtnContainer = function (e) {
         e.currentTarget.textContent = "X"
@@ -64,7 +69,6 @@ easyGameBtn.addEventListener("click", function () {
                 num = Math.floor(Math.random() * btnContainers.length)
             }
 
-            console.log(num)
             btnContainers[num].textContent = "O"
             btnContainers[num].removeEventListener("click", clickBtnContainer)
             count++
@@ -84,7 +88,7 @@ easyGameBtn.addEventListener("click", function () {
         })
 
         if (btns[0].textContent === "X") {
-            paragraphEnd.textContent = `Играчът печели!!!`
+            paragraphEnd.textContent = `Вие печелите!!!`
         } else {
             paragraphEnd.textContent = `Компютърът печели`
         }
@@ -96,6 +100,229 @@ easyGameBtn.addEventListener("click", function () {
 
     prepareForNewGame()
 })
+
+impossibleGameBtn.addEventListener("click", function () {
+
+    btnContainers.forEach(function (item) {
+        item.removeEventListener("click", clickBtnContainer)
+    })
+
+    var table = [0, 0, 0,
+                0, 0, 0,
+                0, 0, 0]
+
+
+    clickBtnContainer = function (e) {
+
+        e.currentTarget.textContent = "X"
+        count++
+        e.currentTarget.removeEventListener("click", clickBtnContainer)
+        checkIfSomeoneWinOrTie()
+
+        btnContainers.forEach(function (item, i) {
+            if (item === e.currentTarget) {
+                table[i] = "x"
+            }
+        })
+
+        if (thereIsNoWinner && count <= 8) {
+            let num = miniMax(table, false).key
+            console.log("num is " + num)
+            table[num] = 'o'
+            btnContainers[num].textContent = "O"
+            btnContainers[num].removeEventListener("click", clickBtnContainer)
+            count++
+            checkIfSomeoneWinOrTie()
+        }
+    }
+
+    someoneWin = function (btns) {
+        thereIsNoWinner = false
+
+        btns.forEach(function (item) {
+            item.style.background = "lightgreen"
+        })
+
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
+
+        if (btns[0].textContent === "X") {
+            paragraphEnd.textContent = `Вие печелите!!!`
+        } else {
+            paragraphEnd.textContent = `Компютърът печели`
+        }
+    }
+
+    tie = function () {
+        paragraphEnd.textContent = "Равенство"
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
+    }
+
+    prepareForNewGame()
+})
+
+function miniMax(table, xTurn, deep=1) {
+    const end = isEnd(table)
+    
+    if (end.isEnd) {
+        if (end.xWins) {
+            //console.log("X wins")
+            return { value: -10 }
+        } else if (end.oWins) {
+            //console.log("O wins")
+            return { value: 10 }
+        } else if (end.isTie) {
+            //console.log("Tie")
+            return { value: 0 }
+        } else {
+            return { value: -100 }
+        }
+    } else {
+
+        let data = []
+
+        table.forEach(function (item, i) {
+            if (item === 0) {
+                let newTable = table.slice()
+
+                if (xTurn) {
+                    newTable[i] = "x"
+                } else {
+                    newTable[i] = "o"
+                }
+
+                if (deep === 1) {
+                    console.log(newTable)
+                }
+
+                //console.log(miniMax(newTable.slice()).value)
+                data.push({ key: i, value: miniMax(newTable.slice(), !xTurn, deep + 1).value })
+            }
+        })
+
+        //console.log(data)
+        if (xTurn) {
+            let minValue = Infinity
+            let neededKey = null
+
+            for (let i = 0; i < data.length; i++) {
+                if (minValue > data[i].value) {
+                    minValue = data[i].value
+                    neededKey = data[i].key
+                }
+            }
+
+
+            return { key: neededKey, value: minValue }
+        } else {
+            let maxValue = -Infinity
+            let neededKey = null
+
+            for (let i = 0; i < data.length; i++) {
+                if (maxValue < data[i].value) {
+                    maxValue = data[i].value
+                    neededKey = data[i].key
+                }
+            }
+
+            return { key: neededKey, value: maxValue }
+        }
+    }
+}
+
+function isEnd(table) {
+    let end = { isEnd: false, xWins: false, oWins: false, isTie: false }
+
+    let thereIsNoWinner = true
+
+    if (table[0] && table[0] === table[1] && table[1] === table[2]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[0] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+
+    } else if (table[3] && table[3] === table[4] && table[4] === table[5]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[3] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    } else if (table[6] && table[6] === table[7] && table[7] === table[8]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[6] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    } else if (table[0] && table[0] === table[3] && table[3] === table[6]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[0] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    } else if (table[1] && table[1] === table[4] && table[4] === table[7]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[1] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    } else if (table[2] && table[2] === table[5] && table[5] === table[8]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[2] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    } else if (table[0] && table[0] === table[4] && table[0] === table[8]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[0] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    } else if (table[2] && table[2] === table[4] && table[4] === table[6]) {
+        end.isEnd = true
+        thereIsNoWinner = false
+        if (table[2] === "x") {
+            end.xWins = true
+        } else {
+            end.oWins = true
+        }
+    }
+
+    if (thereIsNoWinner) {
+        let isTie = true
+
+        table.forEach(function (item) {
+            if (!item) {
+                isTie = false
+            }
+        })
+
+
+        if (isTie) {
+            end.isEnd = true
+            end.isTie = true
+        }
+    }
+
+    return end
+}
 
 
 function prepareForNewGame() {
@@ -110,6 +337,7 @@ function prepareForNewGame() {
     paragraphEnd.textContent = ""
     thereIsNoWinner = true
     count = 0
+    table = null
     xIsOnTurn = true
 }
 
