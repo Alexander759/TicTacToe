@@ -1,8 +1,10 @@
 // JavaScript source code
 const btnContainers = document.querySelectorAll(".container")
 const paragraphEnd = document.getElementById("report-end")
-const newGameBtn = document.getElementById("new-game-with-friend")
+const newGameWithFriendBtn = document.getElementById("new-game-with-friend")
 const easyGameBtn = document.getElementById("easy")
+const mediumGameBtn = document.getElementById("medium")
+const hardGameBtn = document.getElementById("hard")
 const impossibleGameBtn = document.getElementById("impossible")
 
 let clickBtnContainer = null
@@ -14,7 +16,7 @@ let thereIsNoWinner = true
 let count = 0
 //let table = null
 
-newGameBtn.addEventListener("click", function () {
+newGameWithFriendBtn.addEventListener("click", function () {
     btnContainers.forEach(function (item) {
         item.removeEventListener("click", clickBtnContainer)
     })
@@ -51,28 +53,65 @@ newGameBtn.addEventListener("click", function () {
     prepareForNewGame()
 })
 
-easyGameBtn.addEventListener("click", function () {
+mediumGameBtn.addEventListener("click", function () {
     btnContainers.forEach(function (item) {
         item.removeEventListener("click", clickBtnContainer)
     })
 
+    var table = [0, 0, 0,
+        0, 0, 0,
+        0, 0, 0]
+
+
     clickBtnContainer = function (e) {
-        e.currentTarget.textContent = "X"
-        count++
-        e.currentTarget.removeEventListener("click", clickBtnContainer)
-        checkIfSomeoneWinOrTie()
-
-        if (thereIsNoWinner && count <= 8) {
-            let num = Math.floor(Math.random() * btnContainers.length)
-
-            while (btnContainers[num].textContent !== "") {
-                num = Math.floor(Math.random() * btnContainers.length)
-            }
-
-            btnContainers[num].textContent = "O"
-            btnContainers[num].removeEventListener("click", clickBtnContainer)
+        if (count < 2) {
+            e.currentTarget.textContent = "X"
             count++
+            e.currentTarget.removeEventListener("click", clickBtnContainer)
+            btnContainers.forEach(function (item, i) {
+                if (item === e.currentTarget) {
+                    table[i] = "x"
+                }
+            })
             checkIfSomeoneWinOrTie()
+
+            if (thereIsNoWinner) {
+                let num = Math.floor(Math.random() * btnContainers.length)
+
+                if (num % 2 == 0) {
+                    num = 4
+                }
+
+                while (btnContainers[num].textContent !== "") {
+                    num = Math.floor(Math.random() * btnContainers.length)
+                }
+                table[num] = 'o'
+                btnContainers[num].textContent = "O"
+                btnContainers[num].removeEventListener("click", clickBtnContainer)
+                count++
+                checkIfSomeoneWinOrTie()
+            }
+        } else {
+            e.currentTarget.textContent = "X"
+            count++
+            e.currentTarget.removeEventListener("click", clickBtnContainer)
+            checkIfSomeoneWinOrTie()
+
+            btnContainers.forEach(function (item, i) {
+                if (item === e.currentTarget) {
+                    table[i] = "x"
+                }
+            })
+
+            if (thereIsNoWinner && count <= 8) {
+                let num = miniMax(table, false).key
+                console.log("num is " + num)
+                table[num] = 'o'
+                btnContainers[num].textContent = "O"
+                btnContainers[num].removeEventListener("click", clickBtnContainer)
+                count++
+                checkIfSomeoneWinOrTie()
+            }
         }
     }
 
@@ -96,9 +135,187 @@ easyGameBtn.addEventListener("click", function () {
 
     tie = function () {
         paragraphEnd.textContent = "Равенство"
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
     }
 
     prepareForNewGame()
+
+})
+
+hardGameBtn.addEventListener("click", function () {
+    btnContainers.forEach(function (item) {
+        item.removeEventListener("click", clickBtnContainer)
+    })
+
+    var table = [0, 0, 0,
+        0, 0, 0,
+        0, 0, 0]
+
+
+    clickBtnContainer = function (e) {
+        if (count < 2) {
+            e.currentTarget.textContent = "X"
+            count++
+            e.currentTarget.removeEventListener("click", clickBtnContainer)
+            btnContainers.forEach(function (item, i) {
+                if (item === e.currentTarget) {
+                    table[i] = "x"
+                }
+            })
+            checkIfSomeoneWinOrTie()
+
+            if (thereIsNoWinner) {
+                let num = 4
+
+                while (btnContainers[num].textContent !== "") {
+                    num = Math.floor(Math.random() * btnContainers.length)
+                }
+                table[num] = 'o'
+                btnContainers[num].textContent = "O"
+                btnContainers[num].removeEventListener("click", clickBtnContainer)
+                count++
+                checkIfSomeoneWinOrTie()
+            }
+        } else {
+            e.currentTarget.textContent = "X"
+            count++
+            e.currentTarget.removeEventListener("click", clickBtnContainer)
+            checkIfSomeoneWinOrTie()
+
+            btnContainers.forEach(function (item, i) {
+                if (item === e.currentTarget) {
+                    table[i] = "x"
+                }
+            })
+
+            if (thereIsNoWinner && count <= 8) {
+                let num = miniMax(table, false).key
+                console.log("num is " + num)
+                table[num] = 'o'
+                btnContainers[num].textContent = "O"
+                btnContainers[num].removeEventListener("click", clickBtnContainer)
+                count++
+                checkIfSomeoneWinOrTie()
+            }
+        }
+    }
+
+    someoneWin = function (btns) {
+        thereIsNoWinner = false
+
+        btns.forEach(function (item) {
+            item.style.background = "lightgreen"
+        })
+
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
+
+        if (btns[0].textContent === "X") {
+            paragraphEnd.textContent = `Вие печелите!!!`
+        } else {
+            paragraphEnd.textContent = `Компютърът печели`
+        }
+    }
+
+    tie = function () {
+        paragraphEnd.textContent = "Равенство"
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
+    }
+
+    prepareForNewGame()
+
+})
+
+hardGameBtn.addEventListener("click", function () {
+    btnContainers.forEach(function (item) {
+        item.removeEventListener("click", clickBtnContainer)
+    })
+
+    var table = [0, 0, 0,
+        0, 0, 0,
+        0, 0, 0]
+
+
+    clickBtnContainer = function (e) {
+        if (count < 1) {
+            e.currentTarget.textContent = "X"
+            count++
+            e.currentTarget.removeEventListener("click", clickBtnContainer)
+            btnContainers.forEach(function (item, i) {
+                if (item === e.currentTarget) {
+                    table[i] = "x"
+                }
+            })
+            checkIfSomeoneWinOrTie()
+
+            if (thereIsNoWinner) {
+                let num = 4
+
+                while (btnContainers[num].textContent !== "") {
+                    num = Math.floor(Math.random() * btnContainers.length)
+                }
+                table[num] = 'o'
+                btnContainers[num].textContent = "O"
+                btnContainers[num].removeEventListener("click", clickBtnContainer)
+                count++
+                checkIfSomeoneWinOrTie()
+            }
+        } else {
+            e.currentTarget.textContent = "X"
+            count++
+            e.currentTarget.removeEventListener("click", clickBtnContainer)
+            checkIfSomeoneWinOrTie()
+
+            btnContainers.forEach(function (item, i) {
+                if (item === e.currentTarget) {
+                    table[i] = "x"
+                }
+            })
+
+            if (thereIsNoWinner && count <= 8) {
+                let num = miniMax(table, false).key
+                console.log("num is " + num)
+                table[num] = 'o'
+                btnContainers[num].textContent = "O"
+                btnContainers[num].removeEventListener("click", clickBtnContainer)
+                count++
+                checkIfSomeoneWinOrTie()
+            }
+        }
+    }
+
+    someoneWin = function (btns) {
+        thereIsNoWinner = false
+
+        btns.forEach(function (item) {
+            item.style.background = "lightgreen"
+        })
+
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
+
+        if (btns[0].textContent === "X") {
+            paragraphEnd.textContent = `Вие печелите!!!`
+        } else {
+            paragraphEnd.textContent = `Компютърът печели`
+        }
+    }
+
+    tie = function () {
+        paragraphEnd.textContent = "Равенство"
+        btnContainers.forEach(function (btn) {
+            btn.removeEventListener("click", clickBtnContainer)
+        })
+    }
+
+    prepareForNewGame()
+
 })
 
 impossibleGameBtn.addEventListener("click", function () {
