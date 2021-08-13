@@ -7,6 +7,19 @@ body {
     background: rgb(195 254 237)
 }
 
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0cebdf;
+}
+
+button:active {
+    background: #28948e;
+}
+
+
 .title > h1 {
     font-size: 4vw;
 }
@@ -24,10 +37,6 @@ body {
     color: white;
     border-radius: 10px;
     margin: 0;
-}
-
-.is-choosen {
-    background: #00d4d0;
 }
 
 .content-container {
@@ -84,6 +93,18 @@ body {
     border-radius: 20px;
     margin: 10px;
 
+}
+
+.is-choosen {
+    background: #00d4d0;
+}
+
+.is-choosen:hover {
+    background: #0b9c94;
+}
+
+.is-choosen:active {
+    background: #05615c;
 }
 
 #report-end {

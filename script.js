@@ -20,7 +20,7 @@ let count = 0
 let plusMaxCount = 0
 let humanPlayer = "X"
 let aiPlayer = "O"
-let lastClickedBtn = null
+let lastClickedBtn = easyGameBtn
 
 newGameWithFriendBtn.addEventListener("click", function () {
 
@@ -63,6 +63,8 @@ newGameWithFriendBtn.addEventListener("click", function () {
 })
 
 easyGameBtn.addEventListener("click", function () {
+    lastClickedBtn.classList.remove("is-choosen")
+
     lastClickedBtn = easyGameBtn
 
     continerBtnChoosing.classList.remove("make-invisible")
@@ -112,6 +114,8 @@ easyGameBtn.addEventListener("click", function () {
 })
 
 mediumGameBtn.addEventListener("click", function () {
+    lastClickedBtn.classList.remove("is-choosen")
+
     lastClickedBtn = mediumGameBtn
 
     continerBtnChoosing.classList.remove("make-invisible")
@@ -220,6 +224,8 @@ mediumGameBtn.addEventListener("click", function () {
 })
 
 hardGameBtn.addEventListener("click", function () {
+    lastClickedBtn.classList.remove("is-choosen")
+
     lastClickedBtn = hardGameBtn
 
     continerBtnChoosing.classList.remove("make-invisible")
@@ -329,6 +335,8 @@ hardGameBtn.addEventListener("click", function () {
 })
 
 impossibleGameBtn.addEventListener("click", function () {
+    lastClickedBtn.classList.remove("is-choosen")
+
     lastClickedBtn = impossibleGameBtn
 
     continerBtnChoosing.classList.remove("make-invisible")
@@ -589,6 +597,7 @@ function prepareForNewGame() {
         item.textContent = ""
     })
 
+    lastClickedBtn.classList.add("is-choosen")
     paragraphEnd.textContent = ""
     thereIsNoWinner = true
     count = 0
