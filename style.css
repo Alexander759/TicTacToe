@@ -11,6 +11,25 @@ body {
     font-size: 4vw;
 }
 
+.make-invisible {
+    visibility: hidden;
+}
+
+
+.choosing-btn {
+    border: none;
+    width: 45%;
+    font-size: 25px;
+    background-color: aqua;
+    color: white;
+    border-radius: 10px;
+    margin: 0;
+}
+
+.is-choosen {
+    background: #00d4d0;
+}
+
 .content-container {
     height: 90%;
     width: 100%;
@@ -66,10 +85,17 @@ body {
     margin: 10px;
 
 }
+
 #report-end {
     color: aqua;
     font-size: 40px;
     grid-area: p;
+}
+
+#continer-btn-choosing {
+    transform: translateX(10px);
+    display: flex;
+    justify-content: space-around; 
 }
 
 @media screen and (max-width: 800px) {
