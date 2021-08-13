@@ -23,6 +23,9 @@ let aiPlayer = "O"
 let lastClickedBtn = easyGameBtn
 
 newGameWithFriendBtn.addEventListener("click", function () {
+    lastClickedBtn.classList.remove("is-choosen")
+
+    lastClickedBtn = newGameWithFriendBtn
 
     continerBtnChoosing.classList.add("make-invisible")
 
