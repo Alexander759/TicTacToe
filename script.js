@@ -114,6 +114,13 @@ easyGameBtn.addEventListener("click", function () {
     }
 
     prepareForNewGame()
+
+    if (!XIsPlayer) {
+        let num = Math.floor(Math.random() * btnContainers.length)
+        btnContainers[num].textContent = aiPlayer
+        btnContainers[num].removeEventListener("click", clickBtnContainer)
+        count++
+    }
 })
 
 mediumGameBtn.addEventListener("click", function () {
